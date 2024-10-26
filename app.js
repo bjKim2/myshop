@@ -12,7 +12,7 @@ app.use(bodyParser.json()); // 이게 있어야 req.body를 객체로 사용할 
 
 app.use('/api',indexRouter);
 // /ap
-const mongoURI = process.env.LOCAL_DB_ADDRESS;
+const mongoURI = process.env.DB_ADDRESS;
 mongoose.connect(mongoURI, {useNewUrlParser:true}).then(( )=> console.log('MongoDB Connected')).catch((err) => console.log("db connection fail",err));
 
 app.listen(process.env.PORT || 5000, () => {
