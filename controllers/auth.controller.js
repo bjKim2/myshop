@@ -21,6 +21,6 @@ authController.loginWithEmail = async (req,res) =>{
         // res.status(400).json({status:400 , error:err.message})
         res.status(400).json({status:"fail", error:err.message})
     }
-}
+} 
 
 module.exports = authController;
