@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const productSchema = Schema({
     sku : {type:String, required:true, unique:true},
     name : {type:String, required:true},
+    size : {type:Array, required:true}, // 사이즈 여러개 선택할 수있음
     image : {type:String, required:true}, // 이미지 주소
     category : {type:Array , required:true}, // 카테고리 여러개 선택할 수있음
     description : {type:String, required:true},

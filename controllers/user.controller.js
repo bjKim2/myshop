@@ -19,6 +19,20 @@ userController.createUser = async (req, res) => {
     }
 }
 
+userController.getUser = async (req,res) =>{
+    try{
+        const {userId} = req;
+        const user = await User.findById(userId);
+        if(user){
+            res.status(200).json({status:200, user});
+        }
+        throw new Error("Invalid token!");
+
+    }catch(error){
+        res.status(400).json({status:400, error:err.message});
+    }
+}
+
 // userController.loginWithEmail = async (req,res) =>{
 //     try{
 //         let {email,password} = req.body;
