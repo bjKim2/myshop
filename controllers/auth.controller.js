@@ -32,8 +32,6 @@ authController.authenticate = async (req,res,next) =>{
         const tokenString = req.headers.authorization;
         if(!tokenString) throw new Error("token not found");
         const token = tokenString.replace("Bearer ","");
-        console.log(token)
-        console.log(JWT_SECRET)
         jwt.verify(token,JWT_SECRET,(err,payload)=>{
             if(err) throw new Error("token is invalid")
             req.userId = payload._id;
