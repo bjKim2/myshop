@@ -23,7 +23,9 @@ authController.loginWithEmail = async (req,res) =>{
 
     }catch(err){
         // res.status(400).json({status:400 , error:err.message})
-        res.status(400).json({status:"fail", error:err.message})
+        if (!res.headersSent) {
+            res.status(400).json({status:"fail", error:err.message})
+        }
     }
 } 
 
@@ -38,7 +40,9 @@ authController.authenticate = async (req,res,next) =>{
         })
         next();
     }catch(error){
-        res.status(400).json({status:400, error:error.message})
+        if (!res.headersSent) {
+            res.status(400).json({status:400, error:error.message})
+        }        
     }
 }
 
@@ -50,7 +54,9 @@ authController.checkAdminPermission = async (req,res,next) =>{
         if(user.level !== "admin") throw new Error("관리자 권한이 없습니다.")
         next();
     }catch(error){
-        res.status(400).json({status:400, error:error.message})
+        if (!res.headersSent) {
+            res.status(400).json({status:400, error:error.message})
+        }
     }
 }
 
