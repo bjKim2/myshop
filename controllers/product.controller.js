@@ -20,7 +20,6 @@ productController.getProducts = async(req,res) =>{
         const cond = name?{name:{$regex:name,$options:"i"}}:{};
         let query = Product.find(cond);
         let response = {status:"success"};
-
         
         if(page){
             query.skip((page-1)* PAGE_SIZE).limit(PAGE_SIZE);
@@ -40,6 +39,18 @@ productController.getProducts = async(req,res) =>{
     }
 }
 
+productController.getProductDetail = async (req,res) =>{
+    try{
+        const {id} = req.params;
+        const product = await Product.findById(id);
+        if(!product) throw new Error("Product not found");
+        return res.status(200).json({status:"success",data:product});
+
+    }catch(error){
+        return res.status(400).json({status:"fail",error:error.message});
+    }
+}
+
 productController.updateProduct = async (req,res) =>{
     try{
         const {id} = req.params;
@@ -56,4 +67,17 @@ productController.updateProduct = async (req,res) =>{
         res.status(400).json({status:"fail",error:error.message});
     }
 }
+
+productController.deleteProduct = async (req,res) =>{
+    try{
+        const {id} = req.params;
+        const product = await Product.findByIdAndDelete(id);
+        if(!product) throw new Error("Product not found");
+        return res.status(200).json({status:"success",data:product});
+
+    }catch(error){
+        res.status(400).json({status:"fail",error:error.message});
+    }
+}
+
 module.exports = productController;

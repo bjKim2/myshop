@@ -34,8 +34,18 @@ authController.authenticate = async (req,res,next) =>{
         const tokenString = req.headers.authorization;
         if(!tokenString) throw new Error("token not found");
         const token = tokenString.replace("Bearer ","");
+
         jwt.verify(token,JWT_SECRET,(err,payload)=>{
-            if(err) throw new Error("token is invalid")
+            // if(err) throw new Error("token is invalid");
+            if (err) {
+                if (err.name === "TokenExpiredError") {
+                    throw new Error("Token has expired");  // 만료된 토큰
+                } else if (err.name === "JsonWebTokenError") {
+                    throw new Error("Token is invalid");  // 잘못된 토큰
+                } else {
+                    throw new Error("Token verification failed"); // 기타 오류 
+                }
+            }
             req.userId = payload._id;
         })
         next();
