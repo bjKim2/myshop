@@ -80,4 +80,48 @@ productController.deleteProduct = async (req,res) =>{
     }
 }
 
+// productController.checkStock = async (item) => {
+//     const product = await Product.findById(item.productId);
+//     // 내가 사려는 아이템 qty, 재고 비교
+
+//     if (item.qty > product.stock[item.size]) {
+//         return { isVerify: false, message: `${product.name}의 ${item.size} 재고가 부족합니다.` };
+//     }
+
+//     return { isVerify: true, product: product, size: item.size, qty: item.qty };
+// }
+
+productController.checkItemListStock = async (itemList) => {
+    const insufficientStockItems = [];
+    const stockUpdates = [];
+    
+    // 모든 아이템의 재고를 먼저 확인
+    for (const item of itemList) {
+        // const stockCheck = await productController.checkStock(item);
+        const product = await Product.findById(item.productId);
+        if (item.qty > product.stock[item.size]) {
+            insufficientStockItems.push(`${product.name}의 ${item.size} 재고가 부족합니다.`);
+        }else {
+            // 재고가 충분한 경우, Product 인스턴스를 저장
+            stockUpdates.push({ product: product, size: item.size, qty: item.qty });
+        }
+    }
+
+    // 재고가 부족한 물품이 있는 경우, 부족한 물품 리스트 반환
+    if (insufficientStockItems.length === 0) {
+        // 모든 물품의 재고가 충분한 경우에만 재고 업데이트
+        await Promise.all(
+            stockUpdates.map(async update => {
+                console.log("pre update : ",update.product.stock);
+                update.product.stock[update.size] -= update.qty;
+                // console.log("post update : ",update.product.stock);
+                update.product.markModified('stock'); 
+                await update.product.save();
+            })
+        );
+    }
+
+    return insufficientStockItems;
+}
+
 module.exports = productController;

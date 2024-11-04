@@ -19,9 +19,8 @@ cartController.addItemToCart = async (req, res) => {
         // 이미 카트에 아이템이 있으면 에러("이미 아이템이 카트에 있습니다.")
         const existItem = cart.items.find((item) => item.productId.equals(productId) && item.size === size) // productId 는 mongoose objectId 이므로 equals를 사용
         if(existItem){
-            throw new Error("이미 아이템이 카트에 있습니다.")
+            return res.status(200).json({status:"success", data :cart, cartItemQty: cart.items.length ,message: "이미 아이템이 카트에 있습니다."})
         }
-
         // 카트에 아이템을 추가
         cart.items = [...cart.items, {productId,size,qty}]
          await cart.save()
