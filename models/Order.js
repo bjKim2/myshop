@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const User = require('./User');
-const Product = require('./Product');`
-`
+const Product = require('./Product');
+const Cart = require('./Cart');
+
+
 const orderSchema = Schema({
     totalPrice : {type:Number, required:true},
     shipTo : {type:Object, required:true},
@@ -26,10 +28,13 @@ orderSchema.methods.toJSON = function () {
     return obj;
 }
 
-// orderSchema.post("save", async function(){
-//     // 카트를 비워주자
-
-// });
+orderSchema.post("save", async function(){
+    // 카트를 비워주자 
+    // console.log("order save : ",this);
+    const cart = await Cart.findOne({userId:this.userId});
+    cart.items= [];
+    await cart.save();  
+}); // order 저장 후 실행
 
 const Order = mongoose.model("Order",orderSchema);
 

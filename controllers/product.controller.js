@@ -112,9 +112,7 @@ productController.checkItemListStock = async (itemList) => {
         // 모든 물품의 재고가 충분한 경우에만 재고 업데이트
         await Promise.all(
             stockUpdates.map(async update => {
-                console.log("pre update : ",update.product.stock);
                 update.product.stock[update.size] -= update.qty;
-                // console.log("post update : ",update.product.stock);
                 update.product.markModified('stock'); 
                 await update.product.save();
             })

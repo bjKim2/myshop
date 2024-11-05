@@ -14,6 +14,7 @@ const {randomStringGenerator} = require("../utils/randomStringGenerator");
 
 orderController.createOrder = async (req,res,next)=>{
     try {
+        console.log("req.body : ",req.body);
         const {userId} = req;
         const {totalPrice,shipInfo,contact,orderList} = req.body;
         //재고 확인 & 업데이트
