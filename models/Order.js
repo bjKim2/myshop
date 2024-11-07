@@ -17,6 +17,7 @@ const orderSchema = Schema({
         price : {type:Number, required:true},
     }],
     orderNum : {type:String, required:true},
+    status : {type:String, default:"preparing"}, // preparing, pending, completed, cancelled
 },{timestamps:true});
 
 orderSchema.methods.toJSON = function () {

@@ -58,7 +58,6 @@ productController.updateProduct = async (req,res) =>{
         const product = await Product.findByIdAndUpdate(id,{sku,name,size,image,category,description,price,stock,status});
         // console.log("id : ",id);
         if(!product){
-            console.log("Product not found");
             throw new Error("Product not found");
         }
         return res.status(200).json({status:"success",data:product});
